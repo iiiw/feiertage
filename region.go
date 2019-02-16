@@ -22,7 +22,7 @@ func (r Region) HasFeiertag(y, m, d int) bool {
 		if t.Equal(f.Time) {
 			return true
 		}
-		if f.Month() > t.Month() || t.Month() == f.Month() && f.Day() > d {
+		if f.Month() > t.Month() || f.Month() == t.Month() && f.Day() > t.Day() {
 			return false
 		}
 	}
