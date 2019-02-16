@@ -5,6 +5,30 @@ import (
 	"testing"
 )
 
+func TestHasFeiertag(t *testing.T) {
+	testCases := []struct {
+		region  func(int, ...bool) Region
+		y, m, d int
+		ok      bool
+	}{
+		{Berlin, 2019, 3, 8, true},
+		{Berlin, 2016, 3, 8, false},
+		{Hessen, 2010, 5, 1, true},
+		{Österreich, 1999, 12, 26, true},
+		{Österreich, 2000, 1, 12, false},
+		{Deutschland, 2004, 10, 3, true},
+		{Wien, 1990, 11, 15, true},
+	}
+
+	for _, tc := range testCases {
+		if r := tc.region(tc.y); r.HasFeiertag(tc.y, tc.m, tc.d) && !tc.ok {
+			t.Errorf("unexpected Feiertag %d/%d/%d in %s", tc.y, tc.m, tc.d, r.Name)
+		} else if !r.HasFeiertag(tc.y, tc.m, tc.d) && tc.ok {
+			t.Errorf("expected Feiertag %d/%d/%d in %s", tc.y, tc.m, tc.d, r.Name)
+		}
+	}
+}
+
 func TestRegion(t *testing.T) {
 	fmt.Println(All(2016))
 	fmt.Println(Deutschland(2016))
