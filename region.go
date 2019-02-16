@@ -25,10 +25,7 @@ func (r Region) String() string {
 }
 
 func createCommonFeiertagsList(y int) []func(int) Feiertag {
-	var feiern []func(int) Feiertag
-	feiern = []func(int) Feiertag{Neujahr, Ostermontag, ChristiHimmelfahrt, Pfingstmontag}
-
-	return feiern
+	return []func(int) Feiertag{Neujahr, Ostermontag, ChristiHimmelfahrt, Pfingstmontag}
 }
 
 func createUniqAustrianFeiertagsList(y int) []func(int) Feiertag {
@@ -308,18 +305,11 @@ func All(y int, inklSonntage ...bool) Region {
 	if y >= 2019 {
 		feiern = append(feiern, InternationalerFrauentag)
 	}
-	for _, f := range createCommonFeiertagsList(y) {
-		feiern = append(feiern, f)
-	}
+	feiern = append(feiern, createCommonFeiertagsList(y)...)
+	feiern = append(feiern, createUniqAustrianFeiertagsList(y)...)
+	feiern = append(feiern, createUniqGermanFeiertagsList(y)...)
 
-	for _, f := range createUniqAustrianFeiertagsList(y) {
-		feiern = append(feiern, f)
-	}
-	for _, f := range createUniqGermanFeiertagsList(y) {
-		feiern = append(feiern, f)
-	}
-
-	if len(inklSonntage) == 0 || inklSonntage[0] == true {
+	if len(inklSonntage) == 0 || inklSonntage[0] {
 		feiern = append(feiern, Karnevalssonntag, Palmsonntag, Ostern, Pfingsten,
 			Dreifaltigkeitssonntag, Erntedankfest, Volkstrauertag, Totensonntag,
 			ErsterAdvent, ZweiterAdvent, DritterAdvent, VierterAdvent)
