@@ -3,6 +3,7 @@ package feiertage
 import (
 	"fmt"
 	"sort"
+	"time"
 )
 
 // Region represents a Federal State of Germany or Austria (Bundesland). Some
@@ -12,6 +13,20 @@ type Region struct {
 	Name      string
 	Shortname string
 	Feiertage []Feiertag
+}
+
+// HasFeiertag returns true if the given date is a public holiday in the region.
+func (r Region) HasFeiertag(y, m, d int) bool {
+	t := time.Date(y, time.Month(m), d, 0, 0, 0, 0, time.UTC)
+	for _, f := range r.Feiertage {
+		if t.Equal(f.Time) {
+			return true
+		}
+		if f.Month() > t.Month() || t.Month() == f.Month() && f.Day() > d {
+			return false
+		}
+	}
+	return false
 }
 
 // String returns a String containing the name and Shortname of the region and the list of
